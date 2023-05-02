@@ -1,5 +1,6 @@
 package com.bokchi.mysolelife.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.bokchi.mysolelife.R
+import com.bokchi.mysolelife.contentsList.ContentListActivity
 import com.bokchi.mysolelife.databinding.FragmentTipBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,6 +48,19 @@ class TipFragment : Fragment() {
         }
         binding.storeTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_tipFragment_to_storeFragment)
+        }
+
+        // category click
+        binding.category1.setOnClickListener {
+            val intent = Intent(context, ContentListActivity::class.java)
+            intent.putExtra("category", "category1")
+            startActivity(intent)
+        }
+
+        binding.category2.setOnClickListener {
+            val intent = Intent(context, ContentListActivity::class.java)
+            intent.putExtra("category", "category2")
+            startActivity(intent)
         }
 
         return binding.root
