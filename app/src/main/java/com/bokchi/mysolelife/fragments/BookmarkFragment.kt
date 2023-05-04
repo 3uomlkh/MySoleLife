@@ -89,7 +89,7 @@ class BookmarkFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
+                Log.w("BookmarkFragment", "loadPost:onCancelled", databaseError.toException())
             }
         }
         FBRef.category1.addValueEventListener(postListener)
@@ -114,7 +114,7 @@ class BookmarkFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
+                Log.w("BookmarkFragment", "loadPost:onCancelled", databaseError.toException())
             }
         }
 
