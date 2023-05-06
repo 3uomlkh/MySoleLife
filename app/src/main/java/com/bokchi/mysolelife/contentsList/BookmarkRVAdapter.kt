@@ -16,15 +16,17 @@ import com.bokchi.mysolelife.utils.FBRef
 import com.bumptech.glide.Glide
 
 class BookmarkRVAdapter(val context : Context,
-                       val items : ArrayList<ContentModel>,
-                       val keyList : ArrayList<String>,
-                       val bookmarkIdList : MutableList<String>
-) : RecyclerView.Adapter<BookmarkRVAdapter.Viewholder>() {
+                        val items : ArrayList<ContentModel>,
+                        val keyList : ArrayList<String>,
+                        val bookmarkIdList : MutableList<String>)
+
+    : RecyclerView.Adapter<BookmarkRVAdapter.Viewholder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkRVAdapter.Viewholder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.content_rv_item, parent, false)
-        Log.d("BookmarkRVAdapter", "key List : " + keyList.toString())
-        Log.d("BookmarkRVAdapter","Bookmark List : " + bookmarkIdList.toString())
+
+        Log.d("BookmarkRVAdapter", keyList.toString())
+        Log.d("BookmarkRVAdapter", bookmarkIdList.toString())
         return Viewholder(v)
     }
 
@@ -40,43 +42,45 @@ class BookmarkRVAdapter(val context : Context,
 
         fun bindItems(item : ContentModel, key : String) {
 
+            val contentTitle = itemView.findViewById<TextView>(R.id.TextArea)
+            val imageViewArea = itemView.findViewById<ImageView>(R.id.imageArea)
+            val bookmarkArea = itemView.findViewById<ImageView>(R.id.BookmarkArea)
+
             itemView.setOnClickListener {
+                Toast.makeText(context, item.title, Toast.LENGTH_LONG).show()
                 val intent = Intent(context, ContentShowActivity::class.java)
                 intent.putExtra("url", item.webUrl)
                 itemView.context.startActivity(intent)
             }
-            Log.d("bookmarkRV",item.title);
-            val ContentTitle = itemView.findViewById<TextView>(R.id.TextArea)
-            val imageViewArea = itemView.findViewById<ImageView>(R.id.imageArea)
-            val bookmarkArea = itemView.findViewById<ImageView>(R.id.BookmarkArea)
 
-            if(bookmarkIdList.contains(key)) { // bookmarkIdList가 KeyList에 있는 정보를 가지고 있다면
+
+            if(bookmarkIdList.contains(key)) {
                 bookmarkArea.setImageResource(R.drawable.bookmark_color)
             } else {
                 bookmarkArea.setImageResource(R.drawable.bookmark_white)
             }
 
-            bookmarkArea.setOnClickListener {
+            bookmarkArea.setOnClickListener {   // 북마크를 누르면 실행되는 내용
 
-                // 북마크를 클릭했을 때, 북마크가 있는 경우 -> 북마크 삭제
+                // 북마크를 클릭했을 때, 북마크가 이미 있는 경우 -> 북마크 삭제
                 if(bookmarkIdList.contains(key)) {
 
                     FBRef.bookmarkRef
                         .child(FBAuth.getUid())
                         .child(key)
                         .removeValue()
-
                 }
-
             }
 
-            ContentTitle.text = item.title
-            Glide.with(context)
-                .load(item.imageUrl)
-                .into(imageViewArea)
+                contentTitle.text = item.title
 
-            Log.e("BOOKMARK", bookmarkIdList.toString())
+                Glide.with(context)
+                    .load(item.imageUrl)
+                    .into(imageViewArea)
 
         }
+
     }
+
+
 }

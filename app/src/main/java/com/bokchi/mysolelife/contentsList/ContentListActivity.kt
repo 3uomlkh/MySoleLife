@@ -66,9 +66,16 @@ class ContentListActivity : AppCompatActivity() {
         }
         myRef.addValueEventListener(postListener)
 
-        // Firebase RealtimeDatabase에 데이터 추가
+//         Firebase RealtimeDatabase에 데이터 추가
 
 //        val myRef2 = database.getReference("contents2")
+//        for(i in 1..5) {
+//            for(k in 0..10) {
+//                myRef2.push().setValue(
+//                    ContentModel(k.toString(), k.toString(), k.toString())
+//                )
+//            }
+//        }
 //        myRef2.push().setValue(
 //                ContentModel("title4", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FOtaMq%2Fbtq67OMpk4W%2FH1cd0mda3n2wNWgVL9Dqy0%2Fimg.png", "https://philosopher-chan.tistory.com/1249")
 //            )

@@ -67,11 +67,14 @@ class ContentRVAdapter(val context : Context,
                 bookmarkArea.setImageResource(R.drawable.bookmark_white)
             }
 
+            Log.d("bookmark", bookmarkIdList.toString())
+            Log.d("key", key)
+
             bookmarkArea.setOnClickListener {   // 북마크를 누르면 실행되는 내용
                 Log.d("ContentRVA", FBAuth.getUid())
                 Toast.makeText(context, key, Toast.LENGTH_LONG).show()
 
-                // 북마크를 클릭했을 때, 북마크가 있는 경우 -> 북마크 삭제
+                // 북마크를 클릭했을 때, 북마크가 이미 있는 경우 -> 북마크 삭제
                 if(bookmarkIdList.contains(key)) {
 
                     FBRef.bookmarkRef

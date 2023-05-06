@@ -22,15 +22,19 @@ import com.google.firebase.database.ValueEventListener
 
 class BookmarkFragment : Fragment() {
 
-    private lateinit var binding: FragmentBookmarkBinding
+    private lateinit var binding : FragmentBookmarkBinding
+
     private val TAG = BookmarkFragment::class.java.simpleName
-    lateinit var rvAdapter : BookmarkRVAdapter
+
     val bookmarkIdList = mutableListOf<String>()
     val items = ArrayList<ContentModel>()
     val itemKeyList = ArrayList<String>()
 
+    lateinit var rvAdapter : BookmarkRVAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -40,48 +44,52 @@ class BookmarkFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bookmark, container, false)
 
-        // 2. 사용자가 북마크한 정보를 다 가져옴.
+        // 2. 사용자가 북마크한 정보를 다 가져옴!
         getBookmarkData()
 
 
         rvAdapter = BookmarkRVAdapter(requireContext(), items, itemKeyList, bookmarkIdList)
-        val rv : RecyclerView = binding.bookmarkRV
-        rv.adapter= rvAdapter
-        rv.layoutManager = GridLayoutManager(requireContext(), 2)
 
+        val rv : RecyclerView = binding.bookmarkRV
+        rv.adapter = rvAdapter
+
+        rv.layoutManager = GridLayoutManager(requireContext(), 2)
 
         binding.homeTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_bookmarkFragment_to_homeFragment)
         }
+
         binding.tipTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_bookmarkFragment_to_tipFragment)
         }
+
         binding.talkTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_bookmarkFragment_to_talkFragment)
         }
+
         binding.storeTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_bookmarkFragment_to_storeFragment)
         }
+
         return binding.root
     }
 
-    private fun getCategoryData() {
+    private fun getCategoryData(){
+
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                items.clear()
+                for (dataModel in dataSnapshot.children) {
 
-                for(dataModel in dataSnapshot.children) {
-
-                    Log.d("TAG", dataModel.toString())
+                    Log.d(TAG, dataModel.toString())
                     val item = dataModel.getValue(ContentModel::class.java)
 
-                    // 북마크 탭에서 카테고리에 있는 컨텐츠를 포함하고 있다면!
-                    // 3. 전체 컨텐츠 중에서 사용자가 북마크한 정보만 보여줌. -> 1, 2번을 어댑터로 다 넘겨주고 어댑터에서 처리
-                    if(bookmarkIdList.contains(dataModel.key.toString())) {
+                    // 3. 전체 컨텐츠 중에서, 사용자가 북마크한 정보만 보여줌!
+                    if (bookmarkIdList.contains(dataModel.key.toString())){
                         items.add(item!!)
                         itemKeyList.add(dataModel.key.toString())
                     }
+
 
                 }
                 rvAdapter.notifyDataSetChanged()
@@ -89,36 +97,40 @@ class BookmarkFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("BookmarkFragment", "loadPost:onCancelled", databaseError.toException())
+                // Getting Post failed, log a message
+                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
             }
         }
         FBRef.category1.addValueEventListener(postListener)
         FBRef.category2.addValueEventListener(postListener)
+
     }
 
-    private fun getBookmarkData() {
+    private fun getBookmarkData(){
+
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 bookmarkIdList.clear()
 
-                for(dataModel in dataSnapshot.children) {
+                for (dataModel in dataSnapshot.children) {
 
-                    Log.e("TAG", dataModel.toString())
+                    Log.e(TAG, dataModel.toString())
                     bookmarkIdList.add(dataModel.key.toString())
 
                 }
 
-                // 1. 전체 카테고리에 있는 컨텐츠 데이터들을 다 가져옴.
+                // 1. 전체 카테고리에 있는 컨텐츠 데이터들을 다 가져옴!
                 getCategoryData()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("BookmarkFragment", "loadPost:onCancelled", databaseError.toException())
+                // Getting Post failed, log a message
+                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
             }
         }
-
         FBRef.bookmarkRef.child(FBAuth.getUid()).addValueEventListener(postListener)
+
     }
 
 }
